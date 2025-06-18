@@ -1,34 +1,75 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+"use client"
+
+import { useState, useEffect } from "react"
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom"
+import { AnimatePresence } from "framer-motion"
+import Login from "./components/auth/Login.tsx"
+import Register from "./components/auth/Register.tsx"
+import ForgotPassword from "./components/auth/ForgotPassword.tsx"
+import HostDashboard from "./components/host/HostDashboard.tsx"
+import StudentDashboard from "./components/student/StudentDashboard.tsx"
+import OrbitalLoader from "./components/ui/OrbitalLoader.tsx"
+import "./App.css"
+
+interface User {
+  id: string
+  name: string
+  email: string
+  role: "host" | "student"
+}
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [user, setUser] = useState<User | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
+  const [showOrbital, setShowOrbital] = useState(true)
+
+  useEffect(() => {
+    // Simulate initial load
+    const timer = setTimeout(() => {
+      setIsLoading(false)
+      setTimeout(() => setShowOrbital(false), 2000)
+    }, 1000)
+
+    return () => clearTimeout(timer)
+  }, [])
+
+  const handleLogin = (userData: User) => {
+    setUser(userData)
+  }
+
+  const handleLogout = () => {
+    setUser(null)
+  }
+
+  if (isLoading || showOrbital) {
+    return <OrbitalLoader />
+  }
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+      <Router>
+        <AnimatePresence mode="wait">
+          <Routes>
+            {!user ? (
+              <>
+                <Route path="/login" element={<Login onLogin={handleLogin} />} />
+                <Route path="/register" element={<Register />} />
+                <Route path="/forgot-password" element={<ForgotPassword />} />
+                <Route path="*" element={<Navigate to="/login" replace />} />
+              </>
+            ) : (
+              <>
+                {user.role === "host" ? (
+                  <Route path="/*" element={<HostDashboard user={user} onLogout={handleLogout} />} />
+                ) : (
+                  <Route path="/*" element={<StudentDashboard user={user} onLogout={handleLogout} />} />
+                )}
+              </>
+            )}
+          </Routes>
+        </AnimatePresence>
+      </Router>
+    </div>
   )
 }
 
