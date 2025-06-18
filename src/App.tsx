@@ -3,12 +3,13 @@
 import { useState, useEffect } from "react"
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom"
 import { AnimatePresence } from "framer-motion"
-import Login from "./components/auth/Login.tsx"
-import Register from "./components/auth/Register.tsx"
-import ForgotPassword from "./components/auth/ForgotPassword.tsx"
-import HostDashboard from "./components/host/HostDashboard.tsx"
-import StudentDashboard from "./components/student/StudentDashboard.tsx"
-import OrbitalLoader from "./components/ui/OrbitalLoader.tsx"
+import Login from "./components/auth/Login"
+import Register from "./components/auth/Register"
+import ForgotPassword from "./components/auth/ForgotPassword"
+import HostDashboard from "./components/host/HostDashboard"
+import StudentDashboard from "./components/student/StudentDashboard"
+
+import OrbitalLoader from "./components/ui/OrbitalLoader"
 import "./App.css"
 
 interface User {
@@ -41,6 +42,8 @@ function App() {
     setUser(null)
   }
 
+
+
   if (isLoading || showOrbital) {
     return <OrbitalLoader />
   }
@@ -50,6 +53,8 @@ function App() {
       <Router>
         <AnimatePresence mode="wait">
           <Routes>
+            
+
             {!user ? (
               <>
                 <Route path="/login" element={<Login onLogin={handleLogin} />} />

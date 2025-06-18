@@ -9,10 +9,7 @@ interface SidebarProps {
   collapsed: boolean
   onToggle: () => void
   onLogout: () => void
-  user: {
-    name: string
-    email: string
-  }
+  user: { name: string; email: string }
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ collapsed, onToggle, onLogout, user }) => {
@@ -66,13 +63,13 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, onToggle, onLogout, user }
       </div>
 
       {/* Navigation */}
-      <nav className="p-4 space-y-2">
+      <nav className="p-4 space-y-1 flex-1 overflow-y-auto">
         {menuItems.map((item) => {
           const isActive = location.pathname === item.path
           return (
             <Link key={item.path} to={item.path}>
               <motion.div
-                className={`flex items-center space-x-3 p-3 rounded-lg transition-all ${
+                className={`flex items-center space-x-3 p-2.5 mx-1 rounded-lg transition-all ${
                   isActive
                     ? "bg-gradient-to-r from-purple-500/20 to-blue-500/20 border border-purple-500/30 text-white"
                     : "text-gray-400 hover:text-white hover:bg-white/10"
@@ -98,7 +95,7 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, onToggle, onLogout, user }
       </nav>
 
       {/* User Profile & Logout */}
-      <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-white/20">
+      <div className="mt-auto p-4 border-t border-white/20">
         {!collapsed && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="mb-3">
             <div className="flex items-center space-x-3 p-3 rounded-lg bg-white/5">
@@ -115,7 +112,7 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, onToggle, onLogout, user }
 
         <button
           onClick={onLogout}
-          className={`flex items-center space-x-3 p-3 rounded-lg text-red-400 hover:text-red-300 hover:bg-red-500/10 transition-all w-full ${
+          className={`flex items-center space-x-3 p-2.5 rounded-lg text-red-400 hover:text-red-300 hover:bg-red-500/10 transition-all w-full ${
             collapsed ? "justify-center" : ""
           }`}
         >
